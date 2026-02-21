@@ -8,8 +8,8 @@
 #ifndef DM_BINDER_H
 #define DM_BINDER_H
 
+#include "../core/dm_platform.h"
 #include <stdint.h>
-#include "dm_platform.h"
 
 #ifdef __cplusplus
 extern "C" {

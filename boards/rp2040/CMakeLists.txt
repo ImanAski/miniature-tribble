@@ -1,18 +1,3 @@
-include(FetchContent)
-
-FetchContent_Declare(
-  lvgl
-  GIT_REPOSITORY https://github.com/lvgl/lvgl.git
-  GIT_TAG        v9.1.0
-)
-
-# Let LVGL find our lv_conf.h
-set(LV_CONF_PATH "${CMAKE_SOURCE_DIR}/app/ui/lv_conf.h" CACHE STRING "" FORCE)
-
-FetchContent_MakeAvailable(lvgl)
-
-pico_sdk_init()
-
 add_executable(hmic_rp2040
     hal_rp2040.c
 )

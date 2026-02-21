@@ -4,21 +4,45 @@ cmake_minimum_required(VERSION 3.20)
 set(HMIC_BOARD "sim" CACHE STRING "Target board: rp2040 | esp32 | sim | stm32")
 message(STATUS "hmic board target: ${HMIC_BOARD}")
 
-# ── Project declaration ──────────────────────────────────────────────────────
-project(hmic C CXX ASM)
-
-set(CMAKE_C_STANDARD 99)
-set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
-
-# ── Board-specific setup ─────────────────────────────────────────────────────
-# We process the board subdirectory BEFORE the app layer so the board
-# can provide dependencies (like LVGL via FetchContent for simulation).
+# ── Board-specific pre-project setup ─────────────────────────────────────────
 if(HMIC_BOARD STREQUAL "rp2040")
     if(NOT DEFINED ENV{PICO_SDK_PATH} AND NOT DEFINED PICO_SDK_PATH)
         message(FATAL_ERROR "PICO_SDK_PATH is not set.")
     endif()
     include(pico_sdk_import.cmake)
 endif()
+
+# ── Project declaration ──────────────────────────────────────────────────────
+project(hmic C CXX ASM)
+
+# For Pico SDK, init must happen after project()
+if(HMIC_BOARD STREQUAL "rp2040")
+    pico_sdk_init()
+endif()
+
+set(CMAKE_C_STANDARD 11)
+set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
+
+include(FetchContent)
+
+# ── LVGL Setup (Shared across boards) ────────────────────────────────────────
+# We fetch LVGL here once to avoid redundant clones and use shallow cloning
+# to speed up the process and prevent hangs.
+FetchContent_Declare(
+  lvgl
+  GIT_REPOSITORY https://github.com/lvgl/lvgl.git
+  GIT_TAG        v9.1.0
+  GIT_SHALLOW    ON
+  GIT_PROGRESS   ON
+)
+
+# Let LVGL find our lv_conf.h
+set(LV_CONF_PATH "${CMAKE_SOURCE_DIR}/app/ui/lv_conf.h" CACHE STRING "" FORCE)
+
+# Simulator specific LVGL optimizations (Safe to set globally as they are mostly CACHE)
+set(LV_CONF_SKIP_POSIX_DIR_ITER_CHECK ON CACHE BOOL "" FORCE)
+
+FetchContent_MakeAvailable(lvgl)
 
 add_subdirectory(boards/${HMIC_BOARD})
 

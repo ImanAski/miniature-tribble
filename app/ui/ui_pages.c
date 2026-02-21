@@ -17,7 +17,7 @@
 #include "../../core/dm_config.h"
 
 /* LVGL is provided by the board's CMake target */
-#include "lvgl/lvgl.h"
+#include "lvgl.h"
 
 #include <string.h>
 #include <stddef.h>
