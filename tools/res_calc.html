@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>MCU Resource Calculator</title>
+  <style>
+    body { font-family: Arial; padding: 20px; max-width: 700px; }
+    input { width: 100px; margin: 4px; }
+    .result { margin-top: 20px; font-weight: bold; }
+  </style>
+</head>
+<body>
+
+<h2>MCU Resource Calculator</h2>
+
+<h3>Display</h3>
+Resolution X: <input id="rx" value="480"><br>
+Resolution Y: <input id="ry" value="320"><br>
+Bytes per Pixel (2 for RGB565): <input id="bpp" value="2"><br>
+Buffered Lines (0 = full framebuffer): <input id="lines" value="40"><br>
+FPS: <input id="fps" value="30"><br>
+
+<h3>UI</h3>
+Pages: <input id="pages" value="10"><br>
+Components per Page: <input id="components" value="20"><br>
+Components Updated/sec: <input id="updates" value="10"><br>
+
+<h3>System</h3>
+Touch Rate (Hz): <input id="touch" value="50"><br>
+MCU Clock (MHz): <input id="clock" value="160"><br>
+
+<button onclick="calculate()">Calculate</button>
+
+<div class="result" id="output"></div>
+
+<script>
+function calculate() {
+
+  const rx = +document.getElementById("rx").value;
+  const ry = +document.getElementById("ry").value;
+  const bpp = +document.getElementById("bpp").value;
+  const lines = +document.getElementById("lines").value;
+  const fps = +document.getElementById("fps").value;
+
+  const pages = +document.getElementById("pages").value;
+  const components = +document.getElementById("components").value;
+  const updates = +document.getElementById("updates").value;
+
+  const touch = +document.getElementById("touch").value;
+  const clock = +document.getElementById("clock").value * 1e6;
+
+  // --- SRAM ---
+  let framebuffer = lines === 0
+    ? rx * ry * bpp
+    : rx * lines * bpp;
+
+  const componentMemory = components * 200;
+  const margin = 32000;
+
+  const sramTotal = framebuffer + componentMemory + margin;
+
+  // --- CPU ---
+  const cyclesPerPixel = 20;
+  const pixelRate = rx * ry * fps;
+  const cpuDisplay = pixelRate * cyclesPerPixel;
+  const cpuComponents = updates * 1000;
+  const cpuTouch = touch * 500;
+
+  const cpuRequired = cpuDisplay + cpuComponents + cpuTouch;
+  const cpuLoad = (cpuRequired / clock) * 100;
+
+  // --- Flash (rough) ---
+  const firmwareBase = 800000;
+  const flashTotal = firmwareBase * 1.2;
+
+  document.getElementById("output").innerHTML = `
+    Estimated SRAM: ${(sramTotal/1024).toFixed(1)} KB<br>
+    Estimated Flash: ${(flashTotal/1024).toFixed(1)} KB<br>
+    CPU Load: ${cpuLoad.toFixed(1)} %
+  `;
+}
+</script>
+
+</body>
+</html>
