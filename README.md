@@ -23,17 +23,6 @@
 └──────────────────────────────────┘
 ```
 
-**Design rules:**
-
-| The core library MUST | The core library MUST NOT |
-|---|---|
-| Be pure, portable C99 | Include board-specific headers |
-| Communicate through `dm_platform_t` | Call GPIO / UART directly |
-| Be fully deterministic | Block or use RTOS primitives |
-| Process one byte at a time | Allocate memory dynamically in the protocol layer |
-
----
-
 ## Project Layout
 
 ```
@@ -81,6 +70,10 @@ cmake --build build-rp2040
 cmake -B build-esp32 -DHMIC_BOARD=esp32 -DCMAKE_TOOLCHAIN_FILE=$IDF_PATH/tools/cmake/toolchain-esp32s3.cmake
 cmake --build build-esp32
 ```
+
+### STM Family
+
+>[!WIP] This is a Work in progress
 
 ### PC Simulator (POSIX/SDL)
 
@@ -152,7 +145,9 @@ python3 tools/host_tester.py --loopback
 
 ---
 
-## Porting Guide
+## How to write driver for new boards?
+
+Well you can start write respected files in the [`boards`](boards) directory.
 
 1. Implement `dm_platform_t`:
 
@@ -164,7 +159,7 @@ static dm_platform_t my_platform = {
 };
 ```
 
-2. In `main()` / your primary task:
+1. In `main()` / your primary task:
 
 ```c
 dm_init(&my_platform);
@@ -179,4 +174,4 @@ while (1) {
 }
 ```
 
-3. Add `boards/<your_board>/CMakeLists.txt` and link `hmic_core` + `hmic_app`.
+1. Add `boards/<your_board>/CMakeLists.txt` and link `hmic_core` + `hmic_app`.
