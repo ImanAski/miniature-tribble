@@ -1,7 +1,7 @@
 # hmic – Portable Touch TFT Display Manager
 
-> A hardware-agnostic **UI co-processor firmware library** for microcontrollers.
-> The host system is the *brain*. `hmic` is the *visual interface*.
+This is a custom Display Manager, written with a PAL architecture in mind.
+This software is meant to be used for implemented boards.
 
 ---
 
