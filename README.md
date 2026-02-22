@@ -3,8 +3,6 @@
 This is a custom Display Manager, written with a PAL architecture in mind.
 This software is meant to be used for implemented boards.
 
----
-
 ## Architecture
 
 ```
