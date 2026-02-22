@@ -180,9 +180,9 @@ while (1) {
 
 You can use the scripts and tools in the [`tools`](tools) directory
 
-- **[`tools/host_tester.py`](host_tester.py)**: python script for testing the
+- **[`host_tester.py`](tools/host_tester.py)**: python script for testing the
 packet handler in the core
-- **[`tools/res_calc.py`](res_calc.py)**: python script for calculating the
+- **[`res_calc.py`](tools/res_calc.py)**: python script for calculating the
 needed resource for the project
-- **[`tools/res_calc.html`](res_calc.html)**: html page for calculating the
+- **[`res_calc.html`](tools/res_calc.html)**: html page for calculating the
 needed resource for the project
