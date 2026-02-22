@@ -175,3 +175,14 @@ while (1) {
 ```
 
 1. Add `boards/<your_board>/CMakeLists.txt` and link `hmic_core` + `hmic_app`.
+
+## tools
+
+You can use the scripts and tools in the [`tools`](tools) directory
+
+- **[`tools/host_tester.py`](host_tester.py)**: python script for testing the
+packet handler in the core
+- **[`tools/res_calc.py`](res_calc.py)**: python script for calculating the
+needed resource for the project
+- **[`tools/res_calc.html`](res_calc.html)**: html page for calculating the
+needed resource for the project
