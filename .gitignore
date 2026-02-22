@@ -29,6 +29,9 @@ _deps/
 *.swo
 *~
 
+# Test files
+build-*.txt
+
 # Python cache
 __pycache__/
 *.pyc
